@@ -1,0 +1,543 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>MANRESA VASAGAR VATTAM – BOOK MANAGEMENT SYSTEM</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Cormorant+Garamond:wght@600;700&display=swap" rel="stylesheet">
+<style>
+/* Layout: navy banner with gold rule and church name, tab navigation below, one white working column, forms inline, confirmations in dialogs. */
+:root{
+  --bg:#F6F4EE; --surface:#FFFFFF; --surface-2:#F3F1EA; --ink:#15213B; --muted:#5D6579; --line:#DAD6C8;
+  --navy:#14264D; --navy-ink:#FFFFFF; --gold:#B48A2C; --gold-soft:#F4EBD3; --gold-line:#D9BE74;
+  --accent:#14264D; --accent-ink:#FFFFFF; --link:#14264D;
+  --blue:#2A5CA8; --blue-bg:#E3ECF8; --green:#23754A; --green-bg:#DEF1E5; --red:#B0342C; --red-bg:#F9E2DF;
+  --shadow:0 1px 2px rgba(20,38,77,.07),0 8px 24px rgba(20,38,77,.08); --overlay:rgba(10,18,38,.6);
+  --font-display:"Cormorant Garamond",Georgia,"Times New Roman",serif;
+  --font-body:"Figtree",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0C1428; --surface:#121C36; --surface-2:#18243F; --ink:#EBEEF6; --muted:#9FA9C2; --line:#2A3858;
+  --navy:#0A1226; --gold:#D9B45A; --gold-soft:#2A2616; --gold-line:#6B5A2B;
+  --accent:#D9B45A; --accent-ink:#14213B; --link:#E3C778;
+  --blue:#8DB4F0; --blue-bg:#1D2D47; --green:#79D19D; --green-bg:#1B3528; --red:#F08A80; --red-bg:#40201D;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35); --overlay:rgba(0,0,0,.7); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0C1428; --surface:#121C36; --surface-2:#18243F; --ink:#EBEEF6; --muted:#9FA9C2; --line:#2A3858;
+  --navy:#0A1226; --gold:#D9B45A; --gold-soft:#2A2616; --gold-line:#6B5A2B;
+  --accent:#D9B45A; --accent-ink:#14213B; --link:#E3C778;
+  --blue:#8DB4F0; --blue-bg:#1D2D47; --green:#79D19D; --green-bg:#1B3528; --red:#F08A80; --red-bg:#40201D;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35); --overlay:rgba(0,0,0,.7); color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:1.5;min-height:100%}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--navy);z-index:30}
+h1,h2,h3{font-family:var(--font-display);margin:0;line-height:1.15;text-wrap:balance;font-weight:700;color:var(--ink)}
+h1{font-size:32px} h2{font-size:25px} h3{font-size:20px}
+p{margin:0}
+button{font:inherit;color:inherit;cursor:pointer}
+.muted{color:var(--muted)}
+.ic{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.gut{max-width:1160px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* banner */
+.banner{background:var(--navy);color:var(--navy-ink);border-bottom:3px solid var(--gold)}
+.banner .gut{padding-block:18px 16px;display:flex;gap:16px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+.crest{display:flex;align-items:center;gap:14px;min-width:0}
+.cross{width:46px;height:46px;border-radius:50%;border:2px solid var(--gold);display:grid;place-items:center;color:var(--gold);flex:none}
+.cross svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round}
+.banner h1{color:#fff;font-size:clamp(22px,4.6vw,34px);letter-spacing:.08em;font-weight:700}
+.banner .sub{color:#E6D5A2;font-size:14px;letter-spacing:.02em;margin-top:2px}
+.chip{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;padding:5px 12px;border-radius:99px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.28);color:#fff}
+.chip i{width:8px;height:8px;border-radius:50%;background:#aab;display:block}
+.chip.ok i{background:#7FD7A3}.chip.warn i{background:#F1C45B}
+
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--surface);border-bottom:1px solid var(--line)}
+.nav{display:flex;gap:2px;overflow-x:auto;padding-block:6px;scrollbar-width:none}
+.nav::-webkit-scrollbar{display:none}
+.nav button{display:flex;align-items:center;gap:8px;border:0;background:transparent;padding:10px 13px;border-radius:8px;font-weight:600;color:var(--muted);white-space:nowrap;font-size:15px}
+.nav button:hover{background:var(--surface-2);color:var(--ink)}
+.nav button[aria-current="page"]{background:var(--gold-soft);color:var(--ink);box-shadow:inset 0 -3px 0 var(--gold)}
+.strip{margin-top:14px;padding:11px 14px;border-radius:8px;background:var(--gold-soft);border:1px solid var(--gold-line);font-size:14.5px}
+.strip.bad{background:var(--red-bg);border-color:var(--red)}
+
+.main{padding-block:24px 60px;display:grid;gap:20px}
+.page-head{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap}
+.page-head p{color:var(--muted);margin-top:6px;max-width:62ch}
+.rule{height:2px;width:56px;background:var(--gold);margin-top:10px;border-radius:2px}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:8px 18px;border-radius:8px;border:1px solid var(--line);background:var(--surface);font-weight:600;line-height:1.2;white-space:nowrap}
+.btn:hover{border-color:var(--muted)}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn.primary:hover{filter:brightness(1.12)}
+.btn.gold{background:var(--gold);color:#fff;border-color:var(--gold)}
+:root[data-theme="dark"] .btn.gold{color:#14213B}
+.btn.danger{background:var(--red);color:#fff;border-color:var(--red)}
+.btn.sm{min-height:36px;padding:5px 12px;font-size:14.5px}
+.btn.icon{padding:5px 9px}.btn.icon.del{color:var(--red)}
+.btn.ghost{border-color:transparent;background:transparent;color:var(--link)}
+.btn:focus-visible,.nav button:focus-visible,.link:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.link{border:0;background:none;padding:0;color:var(--link);font-weight:700;text-align:left;text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--gold)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px;min-width:0}
+.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.stats .stat:last-child:nth-child(odd){grid-column:1/-1}
+@media (min-width:760px){.stats.s5{grid-template-columns:repeat(5,minmax(0,1fr))}.stats .stat:last-child:nth-child(odd){grid-column:auto}}
+.stat{background:var(--surface);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:10px;padding:14px 16px;display:grid;gap:4px;min-width:0}
+.stat .label{color:var(--muted);font-size:14px;font-weight:600}
+.stat .num{font-family:var(--font-display);font-size:42px;font-weight:700;line-height:1;font-variant-numeric:tabular-nums;color:var(--ink)}
+.stat.red{border-top-color:var(--red)}.stat.red.hot .num{color:var(--red)}
+
+input,select,textarea{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px 12px;width:100%;min-height:46px}
+input[readonly]{background:var(--surface-2);color:var(--muted)}
+textarea{resize:vertical;min-height:72px}
+.field{min-width:0}
+.field label,.filters label{display:block;font-size:14px;font-weight:700;margin-bottom:5px}
+.field .hint{font-size:13px;color:var(--muted);margin-top:4px}
+.err{font-size:14px;color:var(--red);margin-top:4px;font-weight:500}
+.err:empty{display:none}
+.form-alert{background:var(--red-bg);border:1px solid var(--red);padding:9px 12px;border-radius:8px;font-size:14.5px}
+.form-alert:empty{display:none}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+@media (max-width:600px){.grid2{grid-template-columns:minmax(0,1fr)}}
+.form{display:grid;gap:16px;max-width:680px}
+.info{background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:8px;padding:10px 14px;font-size:15px}
+.filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;align-items:end}
+.filters .wide{grid-column:span 2}
+@media (max-width:540px){.filters .wide{grid-column:1/-1}}
+
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table.tbl{width:100%;border-collapse:collapse;min-width:780px}
+.tbl th{font-size:12.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);text-align:left;padding:11px 12px;background:var(--surface-2);border-bottom:2px solid var(--gold-line);white-space:nowrap}
+.tbl td{padding:12px;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl tr:last-child td{border-bottom:0}
+.tbl tr.late td{background:var(--red-bg)}
+.tbl .r{text-align:right}
+.tbl td.act{white-space:nowrap;text-align:right}
+.tbl td.act .row{justify-content:flex-end;flex-wrap:nowrap}
+.tbl td.date{white-space:nowrap;font-variant-numeric:tabular-nums}
+.sub{font-size:13.5px;color:var(--muted)}
+.mono{font-variant-numeric:tabular-nums;white-space:nowrap}
+.badge{display:inline-flex;align-items:center;gap:6px;padding:3px 11px;border-radius:99px;font-size:13px;font-weight:700;white-space:nowrap}
+.badge::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.b-borrowed{background:var(--blue-bg);color:var(--blue)}
+.b-returned{background:var(--green-bg);color:var(--green)}
+.b-overdue{background:var(--red-bg);color:var(--red)}
+.empty{text-align:center;padding:34px 18px;color:var(--muted)}
+.empty h3{color:var(--ink);margin-bottom:6px}
+.empty.small{padding:22px}
+.person{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;align-items:flex-start}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:10px;overflow-x:auto;background:var(--surface);max-width:100%}
+.seg button{border:0;background:transparent;padding:10px 15px;font-weight:600;color:var(--muted);white-space:nowrap}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+.settings{display:grid;gap:16px}
+.settings .card{display:grid;gap:10px}
+.settings ol,.settings ul{margin:0;padding-left:20px;display:grid;gap:4px}
+.foot{font-size:13.5px;color:var(--muted);display:flex;gap:8px;align-items:flex-start}
+
+#modal:empty{display:none}
+.overlay{position:fixed;inset:0;background:var(--overlay);z-index:40;display:flex;align-items:flex-start;justify-content:center;overflow-y:auto;
+  padding-top:max(16px,env(safe-area-inset-top,0px));padding-bottom:max(16px,env(safe-area-inset-bottom,0px));padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.dialog{background:var(--surface);border-radius:14px;width:100%;max-width:600px;margin:auto;box-shadow:var(--shadow);border:1px solid var(--line);border-top:4px solid var(--gold)}
+.dialog.narrow{max-width:460px}
+.dlg-head{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 20px;border-bottom:1px solid var(--line)}
+.dlg-body{padding:18px 20px;display:grid;gap:14px}
+.dlg-foot{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap;padding:14px 20px;border-top:1px solid var(--line);background:var(--surface-2);border-radius:0 0 12px 12px}
+#toasts{position:fixed;z-index:60;left:max(16px,env(safe-area-inset-left,0px));right:max(16px,env(safe-area-inset-right,0px));bottom:max(16px,env(safe-area-inset-bottom,0px));display:grid;gap:8px;justify-items:center;pointer-events:none}
+.toast{background:var(--navy);color:#fff;border:1px solid var(--gold);padding:12px 18px;border-radius:10px;font-weight:600;box-shadow:var(--shadow);max-width:540px}
+.toast.bad{background:var(--red);border-color:var(--red)}
+@media (prefers-reduced-motion:no-preference){.dialog{animation:pop .16s ease-out}@keyframes pop{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/></symbol>
+  <symbol id="i-userplus" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.5-3.6 3.2-5.5 6.5-5.5s6 1.9 6.5 5.5"/><path d="M19 8v6M16 11h6"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.5-3.6 3.2-5.5 6.5-5.5s6 1.9 6.5 5.5"/><circle cx="17.5" cy="9" r="2.5"/><path d="M17.5 14.5c2.4.2 4 1.7 4.5 4.5"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20V3H6.5A2.5 2.5 0 004 5.5z"/><path d="M20 17v4H6.5a2.5 2.5 0 010-4"/></symbol>
+  <symbol id="i-list" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13"/><circle cx="3.5" cy="6" r="1"/><circle cx="3.5" cy="12" r="1"/><circle cx="3.5" cy="18" r="1"/></symbol>
+  <symbol id="i-undo" viewBox="0 0 24 24"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 010 12h-3"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 20V4"/><path d="M4 20h16"/><rect x="8" y="11" width="3" height="6"/><rect x="14" y="7" width="3" height="10"/></symbol>
+  <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3l10 18H2z"/><path d="M12 10v5M12 18v.5"/></symbol>
+</svg>
+
+<header>
+  <div class="banner"><div class="gut">
+    <div class="crest">
+      <div class="cross" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3v18M6 9h12"/></svg></div>
+      <div><h1>MANRESA VASAGAR VATTAM</h1><div class="sub">Church Book Borrowing and Return Management System</div></div>
+    </div>
+    <span class="chip" id="modechip"><i></i><span>Connecting…</span></span>
+  </div></div>
+  <div class="top"><nav class="gut nav" aria-label="Main menu">
+    <button data-act="nav" data-v="dashboard"><svg class="ic" aria-hidden="true"><use href="#i-home"/></svg>Dashboard</button>
+    <button data-act="nav" data-v="register"><svg class="ic" aria-hidden="true"><use href="#i-userplus"/></svg>Register Members</button>
+    <button data-act="nav" data-v="members"><svg class="ic" aria-hidden="true"><use href="#i-users"/></svg>Members List</button>
+    <button data-act="nav" data-v="add"><svg class="ic" aria-hidden="true"><use href="#i-book"/></svg>Add Borrowing Record</button>
+    <button data-act="nav" data-v="history"><svg class="ic" aria-hidden="true"><use href="#i-list"/></svg>Book Borrowing History</button>
+    <button data-act="nav" data-v="return"><svg class="ic" aria-hidden="true"><use href="#i-undo"/></svg>Return Book</button>
+    <button data-act="nav" data-v="reports"><svg class="ic" aria-hidden="true"><use href="#i-chart"/></svg>Reports and Backup</button>
+    <button data-act="nav" data-v="settings"><svg class="ic" aria-hidden="true"><use href="#i-gear"/></svg>Settings and Logout</button>
+  </nav></div>
+</header>
+<div id="notice"></div>
+<main class="gut main" id="app"><div class="empty">Loading records…</div></main>
+<div id="modal"></div>
+<div id="toasts" aria-live="polite"></div>
+
+<script>
+(function(){
+"use strict";
+var $=function(s,r){return (r||document).querySelector(s)};
+var app=$("#app"),modalEl=$("#modal");
+var esc=function(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})};
+var pad=function(n,l){return String(n).padStart(l,"0")};
+function today(){var d=new Date();return d.getFullYear()+"-"+pad(d.getMonth()+1,2)+"-"+pad(d.getDate(),2)}
+function fmt(iso){return iso?iso.slice(8,10)+"-"+iso.slice(5,7)+"-"+iso.slice(0,4):""}
+function validDate(s){if(!/^\d{4}-\d{2}-\d{2}$/.test(s||""))return false;var p=s.split("-").map(Number),d=new Date(p[0],p[1]-1,p[2]);return d.getFullYear()===p[0]&&d.getMonth()===p[1]-1&&d.getDate()===p[2]}
+function daysLate(iso){var a=iso.split("-").map(Number),b=today().split("-").map(Number);return Math.round((Date.UTC(b[0],b[1]-1,b[2])-Date.UTC(a[0],a[1]-1,a[2]))/864e5)}
+function ic(n){return '<svg class="ic" aria-hidden="true"><use href="#i-'+n+'"/></svg>'}
+function has(s,q){return String(s||"").toLowerCase().indexOf(q)>-1}
+function digits(s){return String(s||"").replace(/\D/g,"")}
+
+/* ---------- state ---------- */
+var S={members:[],records:[],ready:false,mode:"pending",admin:true,view:"dashboard",
+  mq:"",hq:"",hs:"all",hm:"",rq:"",repT:"borrowed"};
+function member(id){return S.members.find(function(m){return m.id===id})}
+function rec(id){return S.records.find(function(r){return r.id===id})}
+function status(r){if(r.actualReturn||r.status==="Returned")return "Returned";return (r.expectedReturn&&r.expectedReturn<today())?"Overdue":"Borrowed"}
+function nextId(kind){var p=kind==="members"?"MVV-":"BR-",w=kind==="members"?3:4,max=0;
+  S[kind].forEach(function(x){var n=parseInt(String(x.id).slice(p.length),10);if(n>max)max=n});return p+pad(max+1,w)}
+function memberRecords(id){return S.records.filter(function(r){return r.memberId===id})}
+function counts(list){var c={Borrowed:0,Returned:0,Overdue:0};list.forEach(function(r){c[status(r)]++});return c}
+function sortRecs(list){return list.slice().sort(function(a,b){return (b.borrowDate+b.id).localeCompare(a.borrowDate+a.id)})}
+
+/* ---------- storage ---------- */
+var Store={db:null,
+  init:async function(){
+    var db=null,user=null;
+    try{db=(window.claude&&window.claude.use)?await window.claude.use("db"):null}catch(e){db=null}
+    try{user=(window.claude&&window.claude.use)?await window.claude.use("user"):null}catch(e){user=null}
+    if(user&&user.canEdit){try{S.admin=!!user.canEdit()}catch(e){}}
+    if(db){
+      this.db=db;S.mode="cloud";
+      var loaded={members:false,records:false};
+      ["members","records"].forEach(function(kind){
+        db.collection(kind).onSnapshot(function(snap){
+          S[kind]=snap.docs.map(function(d){return d.data()});
+          loaded[kind]=true;if(loaded.members&&loaded.records)S.ready=true;render();
+        },function(err){S.ready=true;render();toast("Could not read the records ("+((err&&err.code)||"error")+"). Please reload the page.","bad")});
+      });
+    }else{S.mode="local";this.loadLocal();S.ready=true;render()}
+  },
+  loadLocal:function(){try{var raw=localStorage.getItem("mvv.v1");if(raw){var o=JSON.parse(raw);S.members=o.members||[];S.records=o.records||[]}}catch(e){S.mode="memory"}},
+  saveLocal:function(){try{localStorage.setItem("mvv.v1",JSON.stringify({members:S.members,records:S.records}))}catch(e){S.mode="memory";throw new Error("This browser is blocking storage, so records will be lost when the page closes.")}},
+  put:async function(kind,obj){
+    var arr=S[kind],i=arr.findIndex(function(x){return x.id===obj.id});if(i>=0)arr[i]=obj;else arr.push(obj);render();
+    try{if(this.db)await this.db.collection(kind).doc(obj.id).set(obj);else this.saveLocal();return true}catch(e){this.failed(e);return false}
+  },
+  del:async function(kind,id){
+    S[kind]=S[kind].filter(function(x){return x.id!==id});render();
+    try{if(this.db)await this.db.collection(kind).doc(id).delete();else this.saveLocal();return true}catch(e){this.failed(e);return false}
+  },
+  failed:async function(e){
+    var c=e&&e.code;
+    toast(c==="invalid_argument"?"Only an administrator can change records. Your change was not saved.":c==="quota_exceeded"?"The storage is full. Delete old records first.":(e&&e.message)||"Could not save. Please try again.","bad");
+    if(this.db){try{var a=await this.db.collection("members").get(),b=await this.db.collection("records").get();S.members=a.docs.map(function(d){return d.data()});S.records=b.docs.map(function(d){return d.data()});render()}catch(_){}}
+  }
+};
+
+/* ---------- toasts, modals ---------- */
+function toast(msg,kind){var t=document.createElement("div");t.className="toast"+(kind==="bad"?" bad":"");t.textContent=msg;$("#toasts").appendChild(t);setTimeout(function(){t.remove()},kind==="bad"?6500:3500)}
+var lastFocus=null;
+function openModal(html,narrow){lastFocus=document.activeElement;modalEl.innerHTML='<div class="overlay" data-act="overlay"><div class="dialog'+(narrow?" narrow":"")+'" role="dialog" aria-modal="true">'+html+'</div></div>';var f=modalEl.querySelector("input:not([readonly]),select,textarea,button.primary");if(f)f.focus()}
+function closeModal(){modalEl.innerHTML="";if(lastFocus&&document.contains(lastFocus))try{lastFocus.focus()}catch(e){}}
+function dlgHead(t){return '<div class="dlg-head"><h2>'+esc(t)+'</h2><button class="btn sm icon" type="button" data-act="closeModal" aria-label="Close">'+ic("x")+'</button></div>'}
+function confirmBox(o){
+  openModal(dlgHead(o.title)+'<div class="dlg-body"><p>'+o.body+'</p></div><div class="dlg-foot"><button class="btn" type="button" data-act="closeModal">No, keep it</button><button class="btn danger" type="button" id="cfm-yes">'+esc(o.yes||"Yes, delete")+'</button></div>',true);
+  $("#cfm-yes").addEventListener("click",async function(){this.disabled=true;await o.onYes();closeModal()});
+}
+function fld(id,label,inner,hint){return '<div class="field"><label for="'+id+'">'+label+'</label>'+inner+(hint?'<div class="hint">'+hint+'</div>':'')+'<div class="err" id="e-'+id+'" role="alert"></div></div>'}
+function showErrors(root,map){
+  root.querySelectorAll(".err").forEach(function(e){e.textContent=""});
+  var first=null;Object.keys(map).forEach(function(k){var el=root.querySelector("#e-"+k);if(el){el.textContent=map[k];if(!first)first=k}});
+  var al=root.querySelector(".form-alert");if(al)al.textContent=first?"Please correct the items marked in red.":"";
+  if(first){var f=root.querySelector("#"+first);if(f)f.focus()}
+  return !first;
+}
+
+/* ---------- forms ---------- */
+function memberForm(m,prefix){
+  var p=prefix;var v=m||{name:"",phone:""};
+  return '<form class="form" id="'+p+'form" novalidate><div class="form-alert" role="alert"></div>'+
+   fld(p+"id","Member ID",'<input id="'+p+'id" readonly value="'+esc(m?m.id:nextId("members"))+'">','Made automatically')+
+   fld(p+"name","Member Name *",'<input id="'+p+'name" maxlength="80" autocomplete="off" value="'+esc(v.name)+'" placeholder="Full name">')+
+   fld(p+"phone","Phone Number *",'<input id="'+p+'phone" type="tel" inputmode="tel" maxlength="20" autocomplete="off" value="'+esc(v.phone)+'" placeholder="e.g. 9876543210">')+
+   '<div class="row"><button class="btn primary" type="submit">'+ic("check")+(m?"Save Changes":"Register Member")+'</button>'+(m?'<button class="btn" type="button" data-act="closeModal">Cancel</button>':'')+'</div></form>';
+}
+function bindMemberForm(m,p,done){
+  var form=$("#"+p+"form");
+  form.addEventListener("submit",async function(ev){
+    ev.preventDefault();
+    var name=$("#"+p+"name").value.trim().replace(/\s+/g," "),phone=$("#"+p+"phone").value.trim(),errs={};
+    if(name.length<2)errs[p+"name"]="Please type the member's name.";
+    if(!phone)errs[p+"phone"]="Please type the phone number.";
+    else if(!/^[0-9+()\-\s]+$/.test(phone)||digits(phone).length<7||digits(phone).length>15)errs[p+"phone"]="Use 7 to 15 digits. Spaces, + and - are allowed.";
+    else{var dup=S.members.find(function(x){return digits(x.phone)===digits(phone)&&(!m||x.id!==m.id)});if(dup)errs[p+"phone"]="This number is already used by "+dup.name+" ("+dup.id+").";}
+    if(!showErrors(form,errs))return;
+    var obj={id:m?m.id:nextId("members"),name:name,phone:phone,createdAt:m?m.createdAt:new Date().toISOString()};
+    form.querySelectorAll("button").forEach(function(b){b.disabled=true});
+    var ok=await Store.put("members",obj);
+    if(ok)toast(m?"Member updated.":name+" is registered.");
+    done(ok,obj);
+  });
+}
+function memberOptions(sel){
+  return '<option value="">Select a member</option>'+S.members.slice().sort(function(a,b){return a.name.localeCompare(b.name)}).map(function(m){return '<option value="'+esc(m.id)+'"'+(m.id===sel?" selected":"")+'>'+esc(m.name)+' – '+esc(m.phone)+'</option>'}).join("");
+}
+function recordForm(r,p,presetMember){
+  var v=r||{memberId:presetMember||"",book:"",borrowDate:today(),expectedReturn:"",actualReturn:"",status:"Borrowed"};
+  return '<form class="form" id="'+p+'form" novalidate><div class="form-alert" role="alert"></div>'+
+   fld(p+"mem","Member Name *",'<select id="'+p+'mem">'+memberOptions(v.memberId)+'</select>')+
+   fld(p+"phone","Member Phone Number",'<input id="'+p+'phone" readonly placeholder="Shown after you choose a member">','Taken from the member\'s details')+
+   fld(p+"book","Book Name *",'<input id="'+p+'book" maxlength="150" autocomplete="off" value="'+esc(v.book)+'" placeholder="e.g. Ramayana">')+
+   '<div class="grid2">'+fld(p+"bd","Date of Borrowing *",'<input id="'+p+'bd" type="date" value="'+esc(v.borrowDate)+'">')+
+   fld(p+"ed","Expected Return Date",'<input id="'+p+'ed" type="date" value="'+esc(v.expectedReturn)+'">','Optional')+'</div>'+
+   '<div class="grid2">'+fld(p+"ad","Actual Return Date",'<input id="'+p+'ad" type="date" value="'+esc(v.actualReturn)+'">','Leave EMPTY until the book is really returned')+
+   fld(p+"st","Book Status",'<select id="'+p+'st"><option>Borrowed</option><option>Returned</option></select>')+'</div>'+
+   '<div class="row"><button class="btn primary" type="submit">'+ic("check")+(r?"Save Changes":"Save Borrowing Record")+'</button>'+(r?'<button class="btn" type="button" data-act="closeModal">Cancel</button>':'')+'</div></form>';
+}
+function bindRecordForm(r,p,done){
+  var form=$("#"+p+"form"),mem=$("#"+p+"mem"),ph=$("#"+p+"phone"),ad=$("#"+p+"ad"),st=$("#"+p+"st");
+  st.value=(r&&(r.actualReturn||r.status==="Returned"))?"Returned":"Borrowed";
+  function showPhone(){var m=member(mem.value);ph.value=m?m.phone:""}
+  mem.addEventListener("input",showPhone);showPhone();
+  ad.addEventListener("input",function(){st.value=ad.value?"Returned":"Borrowed"});
+  st.addEventListener("input",function(){if(st.value==="Borrowed"&&ad.value)ad.value=""});
+  form.addEventListener("submit",async function(ev){
+    ev.preventDefault();
+    var book=$("#"+p+"book").value.trim().replace(/\s+/g," "),bd=$("#"+p+"bd").value,ed=$("#"+p+"ed").value,a=ad.value,errs={};
+    if(!member(mem.value))errs[p+"mem"]="Please choose a registered member.";
+    if(!book)errs[p+"book"]="Please type the book name.";
+    if(!validDate(bd))errs[p+"bd"]="Please choose the borrowing date.";
+    if(ed&&!validDate(ed))errs[p+"ed"]="This date is not valid.";
+    else if(ed&&validDate(bd)&&ed<bd)errs[p+"ed"]="The expected date cannot be before the borrowing date.";
+    if(a&&!validDate(a))errs[p+"ad"]="This date is not valid.";
+    else if(a&&validDate(bd)&&a<bd)errs[p+"ad"]="The return date cannot be before the borrowing date.";
+    if(st.value==="Returned"&&!a)errs[p+"ad"]="Please type the actual return date for a returned book.";
+    if(!showErrors(form,errs))return;
+    var obj={id:r?r.id:nextId("records"),memberId:mem.value,book:book,borrowDate:bd,expectedReturn:ed,actualReturn:st.value==="Returned"?a:"",status:st.value==="Returned"?"Returned":"Borrowed",createdAt:r?r.createdAt:new Date().toISOString()};
+    if(r&&r.sample)obj.sample=true;
+    form.querySelectorAll("button").forEach(function(b){b.disabled=true});
+    var ok=await Store.put("records",obj);
+    if(ok)toast(r?"Borrowing record updated.":"Saved: "+book+" borrowed by "+member(obj.memberId).name+".");
+    done(ok,obj);
+  });
+}
+function openMemberEdit(id){var m=member(id);if(!m)return;openModal(dlgHead("Edit Member")+'<div class="dlg-body">'+memberForm(m,"em-")+'</div>',true);bindMemberForm(m,"em-",function(){closeModal()})}
+function openRecordEdit(id){var r=rec(id);if(!r)return;openModal(dlgHead("Edit Borrowing Record")+'<div class="dlg-body">'+recordForm(r,"er-")+'</div>');bindRecordForm(r,"er-",function(){closeModal()})}
+function openReturn(id){
+  var r=rec(id);if(!r)return;var m=member(r.memberId)||{name:"Unknown",phone:""};
+  openModal(dlgHead("Return Book")+'<form id="retform" novalidate><div class="dlg-body"><div class="form-alert" role="alert"></div>'+
+   '<div class="info"><b>'+esc(r.book)+'</b><br>'+esc(m.name)+' · '+esc(m.phone)+'<br>Borrowed '+fmt(r.borrowDate)+(r.expectedReturn?' · Expected back '+fmt(r.expectedReturn):'')+'</div>'+
+   fld("ret-date","Actual Return Date *",'<input id="ret-date" type="date" value="">','Type the date the book was really returned.')+
+   '</div><div class="dlg-foot"><button class="btn" type="button" data-act="closeModal">Cancel</button><button class="btn primary" type="submit">'+ic("check")+'Mark as Returned</button></div></form>',true);
+  var form=$("#retform");
+  form.addEventListener("submit",async function(ev){
+    ev.preventDefault();var d=$("#ret-date").value,errs={};
+    if(!validDate(d))errs["ret-date"]="Please choose the actual return date.";
+    else if(d<r.borrowDate)errs["ret-date"]="The return date cannot be before the borrowing date ("+fmt(r.borrowDate)+").";
+    if(!showErrors(form,errs))return;
+    var ok=await Store.put("records",Object.assign({},r,{actualReturn:d,status:"Returned"}));closeModal();if(ok)toast("Marked as returned on "+fmt(d)+".");
+  });
+}
+function delMember(id){
+  var m=member(id);if(!m)return;var n=memberRecords(id).length;
+  confirmBox({title:"Delete this member?",body:'Delete <b>'+esc(m.name)+'</b> ('+esc(m.id)+')'+(n?' and all <b>'+n+'</b> of their borrowing record'+(n===1?"":"s"):"")+'? This cannot be undone.',
+    onYes:async function(){var rs=memberRecords(id);for(var i=0;i<rs.length;i++)await Store.del("records",rs[i].id);await Store.del("members",id);if(S.hm===id)S.hm="";render();toast("Member deleted.")}});
+}
+function delRecord(id){
+  var r=rec(id);if(!r)return;
+  confirmBox({title:"Delete this record?",body:'Delete the borrowing record for <b>'+esc(r.book)+'</b>? This cannot be undone.',onYes:async function(){if(await Store.del("records",id))toast("Record deleted.")}});
+}
+
+/* ---------- tables ---------- */
+function badge(r){var s=status(r),t=s;if(s==="Overdue")t="OVERDUE · "+daysLate(r.expectedReturn)+" day"+(daysLate(r.expectedReturn)===1?"":"s");return '<span class="badge b-'+s.toLowerCase()+'">'+t+'</span>'}
+function recTable(list,o){
+  o=o||{};if(!list.length)return '<div class="card empty small">No records found.</div>';
+  return '<div class="tbl-wrap"><table class="tbl"><thead><tr>'+(o.noMember?'':'<th>Member</th><th>Phone</th>')+'<th>Book Name</th><th>Borrowed</th><th>Expected Return</th><th>Actual Return</th><th>Status</th><th class="r">Actions</th></tr></thead><tbody>'+
+   list.map(function(r){var m=member(r.memberId)||{name:"(deleted member)",phone:""},late=status(r)==="Overdue";
+    var act=o.returnOnly?'<button class="btn sm primary" data-act="returnBook" data-id="'+esc(r.id)+'">'+ic("undo")+'Return Book</button>':
+      (r.actualReturn?'':'<button class="btn sm primary" data-act="returnBook" data-id="'+esc(r.id)+'">'+ic("undo")+'Return</button>')+
+      '<button class="btn sm icon" data-act="editBook" data-id="'+esc(r.id)+'" title="Edit or correct" aria-label="Edit record">'+ic("edit")+'</button><button class="btn sm icon del" data-act="delBook" data-id="'+esc(r.id)+'" title="Delete" aria-label="Delete record">'+ic("trash")+'</button>';
+    return '<tr class="'+(late?"late":"")+'">'+(o.noMember?'':'<td><button class="link" data-act="history" data-id="'+esc(r.memberId)+'">'+esc(m.name)+'</button></td><td class="mono">'+esc(m.phone)+'</td>')+
+     '<td><b>'+esc(r.book)+'</b></td><td class="date">'+fmt(r.borrowDate)+'</td><td class="date">'+(fmt(r.expectedReturn)||'<span class="muted">Not set</span>')+'</td><td class="date">'+(r.actualReturn?fmt(r.actualReturn):'<span class="muted">(Empty)</span>')+'</td><td>'+badge(r)+'</td><td class="act"><div class="row">'+act+'</div></td></tr>'}).join('')+'</tbody></table></div>';
+}
+function membersTable(list){
+  if(!list.length)return '<div class="card empty small">No members found.</div>';
+  return '<div class="tbl-wrap"><table class="tbl" style="min-width:640px"><thead><tr><th>Member ID</th><th>Member Name</th><th>Phone Number</th><th>Books</th><th class="r">Actions</th></tr></thead><tbody>'+
+   list.map(function(m){var rs=memberRecords(m.id),out=rs.filter(function(r){return status(r)!=="Returned"}).length;
+    return '<tr><td class="mono">'+esc(m.id)+'</td><td><button class="link" data-act="history" data-id="'+esc(m.id)+'">'+esc(m.name)+'</button></td><td class="mono">'+esc(m.phone)+'</td><td>'+rs.length+' borrowed<div class="sub">'+out+' not returned</div></td>'+
+     '<td class="act"><div class="row"><button class="btn sm" data-act="history" data-id="'+esc(m.id)+'">'+ic("eye")+'Books</button><button class="btn sm icon" data-act="editMember" data-id="'+esc(m.id)+'" title="Edit member" aria-label="Edit '+esc(m.name)+'">'+ic("edit")+'</button><button class="btn sm icon del" data-act="delMember" data-id="'+esc(m.id)+'" title="Delete member" aria-label="Delete '+esc(m.name)+'">'+ic("trash")+'</button></div></td></tr>'}).join('')+'</tbody></table></div>';
+}
+function stat(cls,label,num){return '<div class="stat '+cls+'"><span class="label">'+label+'</span><span class="num">'+num+'</span></div>'}
+function head(t,p,extra){return '<div class="page-head"><div><h2>'+t+'</h2><div class="rule"></div>'+(p?'<p>'+p+'</p>':'')+'</div>'+(extra||"")+'</div>'}
+function searchBox(id,bind,val,ph){return '<div class="card"><div class="field"><label for="'+id+'">Search</label><input id="'+id+'" data-bind="'+bind+'" type="search" autocomplete="off" placeholder="'+ph+'" value="'+esc(val)+'"></div></div>'}
+
+/* ---------- views ---------- */
+function vDashboard(){
+  var c=counts(S.records),late=sortRecs(S.records.filter(function(r){return status(r)==="Overdue"}));
+  var h=head("Dashboard","A summary of all members and books. The numbers update as soon as you save a record.");
+  h+='<div class="stats s5">'+stat("","Total Registered Members",S.members.length)+stat("","Total Books Borrowed",S.records.length)+stat("","Books Currently Borrowed",c.Borrowed+c.Overdue)+stat("","Books Returned",c.Returned)+stat("red"+(c.Overdue?" hot":""),"Overdue Books",c.Overdue)+'</div>';
+  if(c.Overdue)h+='<div class="strip bad"><b>'+ic("alert")+' Warning: '+c.Overdue+' book'+(c.Overdue===1?" is":"s are")+' overdue.</b> Please contact these members.</div>'+recTable(late.slice(0,10),{});
+  else if(S.records.length)h+='<div class="strip">No books are overdue. Thank you for keeping the records up to date.</div>';
+  if(!S.members.length)h+='<div class="card empty"><h3>Welcome</h3><p>Start by registering your first member.</p><div class="row" style="justify-content:center;margin-top:14px"><button class="btn primary" data-act="nav" data-v="register">'+ic("userplus")+'Register Members</button></div></div>';
+  return h;
+}
+function vRegister(){return head("Register Members","Add each member once. Their Member ID is made automatically.")+'<div class="card">'+memberForm(null,"rm-")+'</div>'}
+function vMembers(){
+  var q=S.mq.trim().toLowerCase(),qd=digits(S.mq);
+  var list=S.members.filter(function(m){return !q||has(m.name,q)||has(m.id,q)||(qd&&digits(m.phone).indexOf(qd)>-1)}).sort(function(a,b){return a.name.localeCompare(b.name)});
+  return head("Members List","Search by name or phone number. Edit or delete a member here.",'<button class="btn primary" data-act="nav" data-v="register">'+ic("plus")+'Register New Member</button>')+
+   searchBox("mq","mq",S.mq,"Type a name or phone number")+(S.members.length?'<p class="muted">'+list.length+' of '+S.members.length+' members</p>'+membersTable(list):'<div class="card empty"><h3>No members yet</h3><p>Use Register Members to add the first one.</p></div>');
+}
+function vAdd(){
+  return head("Add Borrowing Record","Choose a member and type the book. You can add many books for the same member, one record each.")+
+   (S.members.length?'<div class="card">'+recordForm(null,"ar-",S.hm)+'</div>':'<div class="card empty"><h3>Register a member first</h3><p>A borrowing record needs a registered member.</p><div class="row" style="justify-content:center;margin-top:14px"><button class="btn primary" data-act="nav" data-v="register">'+ic("userplus")+'Register Members</button></div></div>');
+}
+function histList(){
+  var q=S.hq.trim().toLowerCase(),qd=digits(S.hq);
+  return sortRecs(S.records.filter(function(r){var m=member(r.memberId)||{};
+    if(S.hm&&r.memberId!==S.hm)return false;
+    if(S.hs!=="all"&&status(r)!==S.hs)return false;
+    if(q&&!(has(m.name,q)||has(r.book,q)||has(m.id,q)||(qd&&digits(m.phone).indexOf(qd)>-1)))return false;
+    return true}));
+}
+function vHistory(){
+  var list=histList(),m=S.hm?member(S.hm):null;
+  var h=head("Book Borrowing History","Pick a member, or search by member name, phone number or book name. Old records are never removed when a book is returned.");
+  h+='<div class="card"><div class="filters"><div class="wide field"><label for="hq">Search</label><input id="hq" data-bind="hq" type="search" autocomplete="off" placeholder="Member name, phone number or book name" value="'+esc(S.hq)+'"></div>'+
+   '<div class="field"><label for="hm">Member</label><select id="hm" data-bind="hm"><option value="">All members</option>'+S.members.slice().sort(function(a,b){return a.name.localeCompare(b.name)}).map(function(x){return '<option value="'+esc(x.id)+'"'+(S.hm===x.id?" selected":"")+'>'+esc(x.name)+'</option>'}).join('')+'</select></div>'+
+   '<div class="field"><label for="hs">Show</label><select id="hs" data-bind="hs">'+[["all","All books"],["Borrowed","Currently borrowed"],["Returned","Returned"],["Overdue","Overdue"]].map(function(o){return '<option value="'+o[0]+'"'+(S.hs===o[0]?" selected":"")+'>'+o[1]+'</option>'}).join('')+'</select></div></div></div>';
+  if(m){var c=counts(memberRecords(m.id));
+    h+='<div class="card person"><div><h3>'+esc(m.name)+'</h3><div class="muted">Phone: <b class="mono" style="color:var(--ink)">'+esc(m.phone)+'</b> · '+esc(m.id)+'</div></div><div class="row"><span class="badge b-borrowed">'+(c.Borrowed+c.Overdue)+' not returned</span><span class="badge b-returned">'+c.Returned+' returned</span>'+(c.Overdue?'<span class="badge b-overdue">'+c.Overdue+' overdue</span>':'')+'<button class="btn sm primary" data-act="addFor" data-id="'+esc(m.id)+'">'+ic("plus")+'Add Book</button></div></div>';
+  }
+  h+='<p class="muted">'+list.length+' record'+(list.length===1?"":"s")+'</p>'+(S.records.length?recTable(list,{noMember:!!m}):'<div class="card empty"><h3>No borrowing records yet</h3><p>Use Add Borrowing Record to save the first one.</p></div>');
+  return h;
+}
+function vReturn(){
+  var q=S.rq.trim().toLowerCase(),qd=digits(S.rq);
+  var list=sortRecs(S.records.filter(function(r){if(status(r)==="Returned")return false;var m=member(r.memberId)||{};return !q||has(m.name,q)||has(r.book,q)||(qd&&digits(m.phone).indexOf(qd)>-1)}));
+  list.sort(function(a,b){return (status(a)==="Overdue"?0:1)-(status(b)==="Overdue"?0:1)});
+  return head("Return Book","These books have not been returned. Press Return Book, then type the actual return date. The date is never filled in for you.")+
+   searchBox("rq","rq",S.rq,"Member name, phone number or book name")+(list.length?recTable(list,{returnOnly:true}):'<div class="card empty"><h3>'+(S.rq?"No books match":"No books waiting to be returned")+'</h3></div>');
+}
+var REPS={borrowed:{label:"Currently Borrowed",pick:function(r){return status(r)!=="Returned"},file:"books-currently-borrowed"},
+  overdue:{label:"Overdue",pick:function(r){return status(r)==="Overdue"},file:"books-overdue"},
+  returned:{label:"Returned",pick:function(r){return status(r)==="Returned"},file:"books-returned"}};
+function repList(){return sortRecs(S.records.filter(REPS[S.repT].pick))}
+function vReports(){
+  var l=repList();
+  return head("Reports and Backup","View a report, and download a backup copy of all records that opens in Excel.")+
+   '<div class="card settings"><h3>Backup</h3><p class="muted">Download these files from time to time and keep them safe, for example on a USB drive or in your email.</p><div class="row"><button class="btn gold" data-act="expMembers">'+ic("download")+'Download Members (CSV)</button><button class="btn gold" data-act="expRecords">'+ic("download")+'Download All Borrowing Records (CSV)</button></div></div>'+
+   '<div class="seg" role="group" aria-label="Report type">'+Object.keys(REPS).map(function(k){return '<button data-act="repTab" data-t="'+k+'" aria-pressed="'+(S.repT===k)+'">'+REPS[k].label+'</button>'}).join('')+'</div>'+
+   '<div class="row" style="justify-content:space-between"><b>'+l.length+' record'+(l.length===1?"":"s")+'</b><button class="btn sm" data-act="expReport">'+ic("download")+'Download this report</button></div>'+recTable(l,{});
+}
+function vSettings(){
+  var cloud=S.mode==="cloud";
+  return head("Settings and Logout")+'<div class="settings">'+
+   '<div class="card"><h3>Where records are kept</h3><p>'+(cloud?'All records are saved in this page\'s private online database. They remain after you close and reopen the website, and every administrator sees the same records on any phone or computer.':S.mode==="memory"?'This browser is blocking storage. Records will be lost when the page is closed.':'Online storage is not available here, so records are kept <b>only in this browser on this device</b>. They are not shared between devices and are lost if the browser data is cleared. Please download backups often.')+'</p></div>'+
+   '<div class="card"><h3>Administrator access</h3>'+(cloud?'<p>Only people who are signed in to Claude and have been given <b>Editor</b> access to this page can see or change the records. Anyone else sees nothing.</p><ol><li>Open this page in Claude and choose <b>Share</b>.</li><li>Invite each administrator by email and set them as <b>Editor</b>.</li><li>Do not turn on a public link for viewers. Public visitors cannot read the records, but keeping the page private is safest.</li></ol>':'<p>Administrator login works when this page is opened in Claude with the online database. In this view there is no login, so anyone who can open this page can change the records.</p>')+'</div>'+
+   '<div class="card"><h3>Logout</h3><p>This website uses your Claude account to sign in, so signing out is done there. Open the account menu in Claude and choose <b>Log out</b>. On a shared computer, always do this when you finish.</p></div>'+
+   '<div class="card"><h3>Test data</h3><p>Add the example member Maria (phone 9876543210) with the book Ramayana, to try the screens. Test items are marked and can be removed in one step. Your real records are not touched.</p><div class="row"><button class="btn" data-act="sample">Add test example</button><button class="btn" data-act="clearSample">Remove test data</button></div></div></div>';
+}
+
+/* ---------- export ---------- */
+function csvCell(v){var s=String(v==null?"":v);if(/^[=+\-@]/.test(s)&&!/^\+?\d[\d\s\-()]*$/.test(s))s="'"+s;return /[",\n\r]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s}
+function toCSV(head,rows){return "﻿"+[head].concat(rows).map(function(r){return r.map(csvCell).join(",")}).join("\r\n")}
+function recRows(list){return list.map(function(r){var m=member(r.memberId)||{};return [r.id,m.id||r.memberId,m.name||"",m.phone||"",r.book,fmt(r.borrowDate),fmt(r.expectedReturn),fmt(r.actualReturn),status(r)]})}
+var RH=["Record ID","Member ID","Member Name","Phone Number","Book Name","Date of Borrowing","Expected Return Date","Actual Return Date","Status"];
+async function saveFile(name,data){
+  var dl=null;try{dl=(window.claude&&window.claude.use)?await window.claude.use("downloads"):null}catch(e){}
+  if(dl){try{await dl.save({filename:name,data:data});toast("File saved: "+name);return}catch(e){var c=e&&e.code;if(c==="declined")return;if(c==="rate_limited"){toast("Please wait a moment and try again.","bad");return}}}
+  try{await navigator.clipboard.writeText(data);toast("Downloads are not available here. The data was copied to your clipboard. Paste it into a text file.")}catch(e){toast("Downloads are not available in this view.","bad")}
+}
+
+/* ---------- sample ---------- */
+async function addSample(){
+  var m=S.members.find(function(x){return x.sample});
+  if(!m){m={id:nextId("members"),name:"Maria (test)",phone:"9876543210",sample:true,createdAt:new Date().toISOString()};
+    if(S.members.some(function(x){return digits(x.phone)===digits(m.phone)})){toast("A member with phone 9876543210 already exists.","bad");return}
+    await Store.put("members",m)}
+  await Store.put("records",{id:nextId("records"),memberId:m.id,book:"Ramayana",borrowDate:"2026-10-05",expectedReturn:"2026-10-20",actualReturn:"",status:"Borrowed",sample:true,createdAt:new Date().toISOString()});
+  toast("Test example added. Open Book Borrowing History to see it.");
+}
+async function clearSample(){
+  var rs=S.records.filter(function(r){return r.sample}),ms=S.members.filter(function(m){return m.sample});
+  if(!rs.length&&!ms.length){toast("There is no test data to remove.");return}
+  for(var i=0;i<rs.length;i++)await Store.del("records",rs[i].id);
+  for(var j=0;j<ms.length;j++){var left=memberRecords(ms[j].id);for(var k=0;k<left.length;k++)await Store.del("records",left[k].id);await Store.del("members",ms[j].id)}
+  toast("Test data removed.");
+}
+
+/* ---------- render ---------- */
+function render(){
+  var ae=document.activeElement,keep=(ae&&ae.id&&app.contains(ae)&&/INPUT|TEXTAREA/.test(ae.tagName))?{id:ae.id,s:ae.selectionStart,e:ae.selectionEnd}:null;
+  var chip=$("#modechip"),L={pending:["","Connecting…"],cloud:["ok","Saved online"],local:["warn","This browser only"],memory:["warn","Not saved"]}[S.mode];
+  chip.className="chip "+L[0];chip.lastChild.textContent=L[1];
+  document.querySelectorAll(".nav button").forEach(function(b){if(b.getAttribute("data-v")===S.view)b.setAttribute("aria-current","page");else b.removeAttribute("aria-current")});
+  var n=$("#notice");
+  n.innerHTML=(S.mode==="local"||S.mode==="memory")?'<div class="gut"><div class="strip"><b>Records are saved in this browser only.</b> They are not shared between devices and are lost if the browser data is cleared. Download a backup from Reports and Backup often.</div></div>':"";
+  if(!S.ready){app.innerHTML='<div class="empty">Loading records…</div>';return}
+  if(!S.admin){app.innerHTML='<div class="card empty"><h3>Administrator access needed</h3><p>Only administrators can view and manage the records. Please ask the church administrator to share this page with you as an <b>Editor</b>.</p></div>';return}
+  var formView=(S.view==="register"||S.view==="add");
+  if(formView&&app.getAttribute("data-v")===S.view&&!S._force){return}
+  S._force=false;app.setAttribute("data-v",S.view);
+  var h={dashboard:vDashboard,register:vRegister,members:vMembers,add:vAdd,history:vHistory,"return":vReturn,reports:vReports,settings:vSettings}[S.view]();
+  app.innerHTML=h;
+  if(S.view==="register")bindMemberForm(null,"rm-",function(ok){if(ok){S._force=true;render();var f=$("#rm-name");if(f)f.focus()}else{var b=$("#rm-form");if(b)b.querySelectorAll("button").forEach(function(x){x.disabled=false})}});
+  if(S.view==="add"&&S.members.length)bindRecordForm(null,"ar-",function(ok,obj){if(ok){S.hm=obj.memberId;S._force=true;render()}else{var b=$("#ar-form");if(b)b.querySelectorAll("button").forEach(function(x){x.disabled=false})}});
+  if(keep){var el=document.getElementById(keep.id);if(el){el.focus();try{el.setSelectionRange(keep.s,keep.e)}catch(_){}}}
+}
+function go(v){S.view=v;S._force=true;render();window.scrollTo(0,0)}
+
+document.addEventListener("click",function(e){
+  var el=e.target.closest("[data-act]");if(!el)return;
+  var a=el.getAttribute("data-act"),id=el.getAttribute("data-id");
+  if(a==="overlay"){if(e.target===el)closeModal();return}
+  switch(a){
+    case "nav":go(el.getAttribute("data-v"));break;
+    case "closeModal":closeModal();break;
+    case "editMember":openMemberEdit(id);break;
+    case "delMember":delMember(id);break;
+    case "history":S.hm=id;S.hq="";S.hs="all";go("history");break;
+    case "addFor":S.hm=id;go("add");break;
+    case "editBook":openRecordEdit(id);break;
+    case "returnBook":openReturn(id);break;
+    case "delBook":delRecord(id);break;
+    case "repTab":S.repT=el.getAttribute("data-t");render();break;
+    case "expMembers":saveFile("members-"+today()+".csv",toCSV(["Member ID","Member Name","Phone Number"],S.members.slice().sort(function(a,b){return a.id.localeCompare(b.id)}).map(function(m){return [m.id,m.name,m.phone]})));break;
+    case "expRecords":saveFile("borrowing-records-"+today()+".csv",toCSV(RH,recRows(sortRecs(S.records))));break;
+    case "expReport":saveFile(REPS[S.repT].file+"-"+today()+".csv",toCSV(RH,recRows(repList())));break;
+    case "sample":addSample();break;
+    case "clearSample":confirmBox({title:"Remove test data?",body:"This removes only the test example (Maria and Ramayana). Your real records are kept.",yes:"Yes, remove",onYes:clearSample});break;
+  }
+});
+app.addEventListener("input",function(e){
+  var k=e.target.getAttribute&&e.target.getAttribute("data-bind");if(!k)return;
+  S[k]=e.target.value;S._force=true;render();
+});
+document.addEventListener("keydown",function(e){if(e.key==="Escape"&&modalEl.firstChild)closeModal()});
+
+render();Store.init();
+})();
+</script>
+
+</body></html>
